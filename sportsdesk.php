@@ -44,8 +44,8 @@ class cran_SportsDesk {
 	}
 	function register_taxonomy($tax) {
 		register_taxonomy(
-			strtolower($tax), 
-			array('match'), 
+			strtolower($tax),
+			array('match'),
 			array(
 				"hierarchical" => true,
 				"label" => ucwords($tax)."s",
@@ -62,7 +62,7 @@ class cran_SportsDesk {
     function cran_SportsDesk(){
                 $this->custom_post_type();
                 $this->custom_taxonomies();
-		
+
 		// Add the hooks for the admin display
                 //This function adds the columns to the admin panel
                 add_filter("manage_edit-match_columns", array(&$this, "edit_columns"));
@@ -70,13 +70,13 @@ class cran_SportsDesk {
 	        add_action("manage_posts_custom_column", array(&$this, "custom_columns"));
 		//add the pluging settings, etc
  		add_action('admin_menu',array(&$this,'create_settings_menu'));
-		#add_filter("manage_edit-match_sortable_columns", array(&$this,'wr_event_sortable_columns')); 
-                //We want to be able to add styles to the admin so we can mark a canceled match as such.  
+		#add_filter("manage_edit-match_sortable_columns", array(&$this,'wr_event_sortable_columns'));
+                //We want to be able to add styles to the admin so we can mark a canceled match as such.
 		add_action('admin_footer',array(&$this,'style_posts_list'));
 		//Add shortcode for sportsdesk
 		add_shortcode( 'sportsdesk', array(&$this, 'sd_shortcode') );
 		add_shortcode( 'awayfixturelocations', array(&$this, 'awayfixloc_shortcode') );
-		add_filter('the_posts',array(&$this,'show_all_future_posts') );	
+		add_filter('the_posts',array(&$this,'show_all_future_posts') );
 		add_filter('the_content',array(&$this,'awayfixture_content_filter'));
 	}
 	function sd_shortcode($atts){
@@ -84,7 +84,7 @@ class cran_SportsDesk {
 		//include("display_sportsdesk.php");
 		//include('sportsdesk_header.php');
 		//query_posts('week=week-10-michaelmas-2012');
-		//Check post for an edit	
+		//Check post for an edit
 		if(!$_POST['post_content']){
 			get_template_part('taxonomy','week');
 			wp_reset_query();
@@ -129,7 +129,7 @@ class cran_SportsDesk {
 		if($vars['orderby'] = 'merlinid'){
 			#print "merlin";
 			#print_r($vars);
-			$vars = array_merge( 
+			$vars = array_merge(
 				$vars,
 				array(
 					'meta_key'  => 'fixture_id',
@@ -138,7 +138,7 @@ class cran_SportsDesk {
 				)
 			);
 		}
-		
+
 		return $vars;
 
 	}*/
@@ -163,7 +163,7 @@ class cran_SportsDesk {
          );
          return $columns;
     }
-    
+
 	function custom_columns($column){
 		global $post;
 		//The value of $column matches up with the key's held in the edit_columns function above
@@ -231,7 +231,7 @@ class cran_SportsDesk {
 			break;
         }
     }
-    
+
 	function create_settings_menu(){
 		add_submenu_page('edit.php?post_type=match','Sports Desk Config','Config','manage_options','sports-desk-config',array(&$this,'settings_page'));
 		//reg the setting
@@ -245,12 +245,12 @@ class cran_SportsDesk {
 		register_setting( 'cran_sportsdesk_group', 'cran_year' );
 		register_setting( 'cran_sportsdesk_group', 'cran_awayfixturepage' );
 		register_setting( 'cran_sportsdesk_group', 'cran_mode' );
-		register_setting( 'cran_sportsdesk_group', 'cran_blackboard_ip' );    		
+		register_setting( 'cran_sportsdesk_group', 'cran_blackboard_ip' );
 		register_setting( 'cran_sportsdesk_group', 'cran_blackboard_folder' );
 
 		//Format the metaboxes for custom post type of match
-		remove_meta_box('postexcerpt','match','normal');	
-    } 
+		remove_meta_box('postexcerpt','match','normal');
+    }
     function settings_page(){
         include('settings.php');
     }
@@ -271,7 +271,7 @@ class cran_SportsDesk {
 		    $new_content = $content;
 		}
 		//if (2829 == $post->post_parent) {
-		//	print "Away Fixture Page";	
+		//	print "Away Fixture Page";
 		//}
 		return $new_content;
     }
@@ -282,10 +282,11 @@ class cran_SportsDesk {
 */
 include('functions.php');
 
-foreach (glob("widgets/*.php") as $filename) {
-    require_once($filename);
-}
+
 function cranleigh_sportsdesk_register_widgets() {
+	foreach (glob(dirname(__FILE__)."/widgets/*.php") as $filename) {
+ 	   require_once($filename);
+	}
 	$widgets = [
 		"SportsDesk_Results_Widget",
 		"SportsDesk_Fixtures_Widget",
@@ -306,3 +307,4 @@ add_action("init", "cran_SportsDesk_Init");
 function cran_SportsDesk_Init() { global $sportsdesk; $sportsdesk = new cran_SportsDesk(); }
 
 ?>
+
