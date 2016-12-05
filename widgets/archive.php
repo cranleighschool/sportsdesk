@@ -121,6 +121,3 @@ class SportsDesk_Archive_Widget extends WP_Widget {
 
 
 } // End of widget class
-
-
-?>
