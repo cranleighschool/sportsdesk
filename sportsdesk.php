@@ -306,5 +306,4 @@ add_action("init", "cran_SportsDesk_Init");
 
 function cran_SportsDesk_Init() { global $sportsdesk; $sportsdesk = new cran_SportsDesk(); }
 
-?>
 
