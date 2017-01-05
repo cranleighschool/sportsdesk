@@ -301,9 +301,15 @@ function cranleigh_sportsdesk_register_widgets() {
 }
 add_action( 'widgets_init', 'cranleigh_sportsdesk_register_widgets' );
 
+
+
 /* Actions */
 add_action("init", "cran_SportsDesk_Init");
 
-function cran_SportsDesk_Init() { global $sportsdesk; $sportsdesk = new cran_SportsDesk(); }
+function cran_SportsDesk_Init() {
+	global $sportsdesk;
+	$sportsdesk = new cran_SportsDesk();
+}
+
 
 
