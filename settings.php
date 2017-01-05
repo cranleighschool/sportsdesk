@@ -35,23 +35,29 @@
 	<input type="text" name="cran_blackboard_folder" size="100" value="<?php echo get_option('cran_blackboard_folder'); ?>" />
         <br />
         <br />
+	<label>Sportsdesk Slug</label>
+	<input type="text" name="cran_sportsdesk_slug" style="width:500px" placeholder="EG: /information/sports-desk" value="<?php echo get_option('cran_sportsdesk_slug'); ?>" /><br />
+	<small>After you change this you'll need to re-save/flush your permalink structure</small>
+	<br />
+	<br />
 	<label>Team List Display:</label>
 	<select name="cran_mode">
 		<option value="Enable"
 		<?php if(get_option('cran_mode')=='Enable') print " selected='selected' ";?>>Enable</option>
 		<option value="Disable"
 		<?php if(get_option('cran_mode')=='Disable') print " selected='selected' ";?>>Disable</option>
-	</select>	
+	</select>
         <p class="submit">
         <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
         </p>
     </form>
 </div>
 
-<?php 
+<?php
 function cs_sportdesk_get_term_select_value($current_value, $option) {
 	if ($current_value == $option) {
 		return " selected=\"selected\" ";
 	}
 	return false;
 }
+

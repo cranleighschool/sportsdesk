@@ -9,6 +9,13 @@ Author URI: http://www.cranleigh.org
 
 class cran_SportsDesk {
 
+	function sportsdesk_slug() {
+		$sportsdesk_slug = get_option('cran_sportsdesk_slug');
+		$sportsdesk_slug = ltrim($sportsdesk_slug, "/");
+		$sportsdesk_slug = rtrim($sportsdesk_slug, "/");
+		return $sportsdesk_slug;
+	}
+
 	function custom_post_type() {
 		register_post_type('match', [
 			'labels' => [
@@ -26,7 +33,7 @@ class cran_SportsDesk {
 			'capability_type' => 'post',
 			'hierarchical' => false,
 			'rewrite' => [
-				"slug" => "sportsdesk/match",
+				"slug" => $this->sportsdesk_slug()."/match",
 				"with_front" => false
 			], // Permalinks
 			'query_var' => "match", // This goes to the WP_Query schema
@@ -51,7 +58,7 @@ class cran_SportsDesk {
 				"label" => ucwords($tax)."s",
 				"singular_label" => ucwords($tax),
 				"rewrite" => array(
-					"slug" => 'sportsdesk/'.strtolower($tax),
+					"slug" => $this->sportsdesk_slug().'/'.strtolower($tax),
 					"with_front" => false
 				),
 				"show_in_nav_menu" => false
@@ -247,6 +254,7 @@ class cran_SportsDesk {
 		register_setting( 'cran_sportsdesk_group', 'cran_mode' );
 		register_setting( 'cran_sportsdesk_group', 'cran_blackboard_ip' );
 		register_setting( 'cran_sportsdesk_group', 'cran_blackboard_folder' );
+		register_setting( 'cran_sportsdesk_group', 'cran_sportsdesk_slug');
 
 		//Format the metaboxes for custom post type of match
 		remove_meta_box('postexcerpt','match','normal');
