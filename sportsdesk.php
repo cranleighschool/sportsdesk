@@ -26,13 +26,13 @@ class cran_SportsDesk {
 			'capability_type' => 'post',
 			'hierarchical' => false,
 			'rewrite' => [
-				"slug" => "match",
+				"slug" => "sportsdesk/match",
 				"with_front" => false
 			], // Permalinks
 			'query_var' => "match", // This goes to the WP_Query schema
 			'supports' => array('title','author', 'excerpt', 'editor' ,/*'custom-fields'*/),
 			'menu_icon' => plugins_url( 'img/16-Stop-Watch.png' , __FILE__ ),
-			'has_archive' => true,	//Create an archive to display historic data
+			'has_archive' => false,	//Create an archive to display historic data
 		]);
 	}
 	function custom_taxonomies() {
@@ -45,13 +45,13 @@ class cran_SportsDesk {
 	function register_taxonomy($tax) {
 		register_taxonomy(
 			strtolower($tax),
-			array('match'),
+			'match',
 			array(
 				"hierarchical" => true,
 				"label" => ucwords($tax)."s",
 				"singular_label" => ucwords($tax),
 				"rewrite" => array(
-					"slug" => strtolower($tax),
+					"slug" => 'sportsdesk/'.strtolower($tax),
 					"with_front" => false
 				),
 				"show_in_nav_menu" => false
@@ -60,8 +60,8 @@ class cran_SportsDesk {
 
     /* Constructor for the class called on init */
     function cran_SportsDesk(){
-                $this->custom_post_type();
-                $this->custom_taxonomies();
+		$this->custom_taxonomies(); // Because of the special rewrites on the custom taxonomies, they have to be loaded before the Custom Post Type
+		$this->custom_post_type();
 
 		// Add the hooks for the admin display
                 //This function adds the columns to the admin panel
