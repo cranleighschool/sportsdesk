@@ -9,6 +9,61 @@ Author URI: http://www.cranleigh.org
 
 class cran_SportsDesk {
 
+    function __construct(){
+		$this->custom_taxonomies(); // Because of the special rewrites on the custom taxonomies, they have to be loaded before the Custom Post Type
+		$this->custom_post_type();
+		$this->run_sync();
+
+		// Add the hooks for the admin display
+
+		//This function adds the columns to the admin panel
+		add_filter("manage_edit-match_columns", array(&$this, "edit_columns"));
+
+		//This function populates it with data
+		add_action("manage_posts_custom_column", array(&$this, "custom_columns"));
+
+		//add the pluging settings, etc
+ 		add_action('admin_menu',array(&$this,'create_settings_menu'));
+		#add_filter("manage_edit-match_sortable_columns", array(&$this,'wr_event_sortable_columns'));
+
+		//We want to be able to add styles to the admin so we can mark a canceled match as such.
+		add_action('admin_footer',array(&$this,'style_posts_list'));
+		//Add shortcode for sportsdesk
+		add_shortcode( 'sportsdesk', array(&$this, 'sd_shortcode') );
+		add_shortcode( 'awayfixturelocations', array(&$this, 'awayfixloc_shortcode') );
+		add_filter('the_posts',array(&$this,'show_all_future_posts') );
+		add_filter('the_content',array(&$this,'awayfixture_content_filter'));
+
+		add_action('sportsdesk_daily', array($this, 'run_sync'));
+	}
+
+	function plugin_activation() {
+		if (!wp_next_scheduled( 'sportsdesk_daily' )) {
+			wp_schedule_event(1483228800, 'hourly', 'sportsdesk_daily'); // Start from 1st Jan 2017 at midnight
+		}
+	}
+
+	function plugin_deactivation() {
+		wp_clear_scheduled_hook( 'sportsdesk_daily' );
+	}
+
+	function run_sync() {
+		//$url = get_site_url();
+		//error_log('This is the scheduled event that runs hourly for now on sportsdesk - we eventually want it to run:'.$url);
+		$url = get_site_url().'/sync_senior_sports.php?passcode=The43Peculiarity&fred';
+		//$ch = curl_init();
+		//curl_setopt($ch, CURLOPT_URL, $url);
+		//curl_setopt($ch, CURLOPT_HEADER, 0);
+		//curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+		//$output = curl_exec($ch);
+		//curl_close($ch);
+		wp_mail('frb@cranleigh.org', 'Sports Sync', 'The Sports Sync has just been run');
+		//echo "<pre>$output</pre>";*/
+
+		// do this daily
+	}
+
 	function sportsdesk_slug() {
 		$sportsdesk_slug = get_option('cran_sportsdesk_slug');
 		$sportsdesk_slug = ltrim($sportsdesk_slug, "/");
@@ -65,27 +120,7 @@ class cran_SportsDesk {
 			));
 	}
 
-    /* Constructor for the class called on init */
-    function cran_SportsDesk(){
-		$this->custom_taxonomies(); // Because of the special rewrites on the custom taxonomies, they have to be loaded before the Custom Post Type
-		$this->custom_post_type();
 
-		// Add the hooks for the admin display
-                //This function adds the columns to the admin panel
-                add_filter("manage_edit-match_columns", array(&$this, "edit_columns"));
-                //This function populates it with data
-	        add_action("manage_posts_custom_column", array(&$this, "custom_columns"));
-		//add the pluging settings, etc
- 		add_action('admin_menu',array(&$this,'create_settings_menu'));
-		#add_filter("manage_edit-match_sortable_columns", array(&$this,'wr_event_sortable_columns'));
-                //We want to be able to add styles to the admin so we can mark a canceled match as such.
-		add_action('admin_footer',array(&$this,'style_posts_list'));
-		//Add shortcode for sportsdesk
-		add_shortcode( 'sportsdesk', array(&$this, 'sd_shortcode') );
-		add_shortcode( 'awayfixturelocations', array(&$this, 'awayfixloc_shortcode') );
-		add_filter('the_posts',array(&$this,'show_all_future_posts') );
-		add_filter('the_content',array(&$this,'awayfixture_content_filter'));
-	}
 	function sd_shortcode($atts){
 		//extract( shortcode_atts( array('context' => 'current'), $atts ) );
 		//include("display_sportsdesk.php");
