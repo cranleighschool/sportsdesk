@@ -12,7 +12,6 @@ class cran_SportsDesk {
     function __construct(){
 		$this->custom_taxonomies(); // Because of the special rewrites on the custom taxonomies, they have to be loaded before the Custom Post Type
 		$this->custom_post_type();
-		$this->run_sync();
 
 		// Add the hooks for the admin display
 
@@ -50,7 +49,7 @@ class cran_SportsDesk {
 	function run_sync() {
 		//$url = get_site_url();
 		//error_log('This is the scheduled event that runs hourly for now on sportsdesk - we eventually want it to run:'.$url);
-		$url = get_site_url().'/sync_senior_sports.php?passcode=The43Peculiarity&fred';
+		$url = get_site_url().'/sync_senior_sports.php?passcode=The43Peculiarity';
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -58,7 +57,7 @@ class cran_SportsDesk {
 
 		$output = curl_exec($ch);
 		curl_close($ch);
-		wp_mail('frb@cranleigh.org', 'Sports Sync', 'The Sports Sync has just been run');
+		wp_mail('frb@cranleigh.org', 'Sports Sync', $output);
 		//echo "<pre>$output</pre>";*/
 
 		// do this daily
