@@ -51,13 +51,13 @@ class cran_SportsDesk {
 		//$url = get_site_url();
 		//error_log('This is the scheduled event that runs hourly for now on sportsdesk - we eventually want it to run:'.$url);
 		$url = get_site_url().'/sync_senior_sports.php?passcode=The43Peculiarity&fred';
-		//$ch = curl_init();
-		//curl_setopt($ch, CURLOPT_URL, $url);
-		//curl_setopt($ch, CURLOPT_HEADER, 0);
-		//curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-		//$output = curl_exec($ch);
-		//curl_close($ch);
+		$output = curl_exec($ch);
+		curl_close($ch);
 		wp_mail('frb@cranleigh.org', 'Sports Sync', 'The Sports Sync has just been run');
 		//echo "<pre>$output</pre>";*/
 
