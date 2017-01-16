@@ -86,6 +86,7 @@ class cran_SportsDesk {
 			'_edit_link' => 'post.php?post=%d',
 			'capability_type' => 'post',
 			'hierarchical' => false,
+			'menu_position' => 27,
 			'rewrite' => [
 				"slug" => $this->sportsdesk_slug()."/match",
 				"with_front" => false
