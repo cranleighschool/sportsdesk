@@ -84,7 +84,7 @@ class cran_SportsDesk {
 			'show_ui' => true, // UI in admin panel
 			'_builtin' => false, // It's a custom post type, not built in
 			'_edit_link' => 'post.php?post=%d',
-			'capability_type' => 'post',
+			'capability_type' => 'page',
 			'hierarchical' => false,
 			'menu_position' => 27,
 			'rewrite' => [
