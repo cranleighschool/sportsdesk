@@ -10,8 +10,8 @@ Author URI: http://www.cranleigh.org
 class cran_SportsDesk {
 
     function __construct(){
-		$this->custom_taxonomies(); // Because of the special rewrites on the custom taxonomies, they have to be loaded before the Custom Post Type
-		$this->custom_post_type();
+	    add_action('init', array($this, 'custom_taxonomies')); // Because of the special rewrites on the custom taxonomies, they have to be loaded before the Custom Post Type
+	    add_action('init', array($this, 'custom_post_type'));
 
 		// Add the hooks for the admin display
 
@@ -34,6 +34,46 @@ class cran_SportsDesk {
 		add_filter('the_content',array(&$this,'awayfixture_content_filter'));
 
 		add_action('sportsdesk_daily', array($this, 'run_sync'));
+
+		add_filter( 'rwmb_meta_boxes', array(&$this, 'metaboxes'), 99999 );
+
+	}
+	function helper_metabox_fields($input_fields) {
+		$fields = [];
+		foreach ($input_fields as $key => $name):
+			$new_field = [
+				"name" => $name,
+				"id" => $key,
+				"disabled" => true
+			];
+			$fields[] = $new_field;
+		endforeach;
+		return $fields;
+	}
+	function metaboxes($metaboxes) {
+		$fields = [
+			"fixture_id" => "Merlin ID",
+			"result" => "Result",
+			"score" => "Score",
+			"cran_score" => "Cranleigh Score",
+			"opp_score" => "Opponent Score",
+			"week" => "Week",
+			"academicyear" => "Academic Year",
+			"term" => "Academic Term",
+			"fixture_datetime" => "Fixture Date",
+			"academic_year" => "Academic Year"
+		];
+
+		$metaboxes[] = array(
+			'title'  => __( 'Merlin Settings', 'cranleigh-2016' ),
+			'id' => 'merlin_settings',
+			'post_types' => array('match'), // Coming up with a better way to list all enabled post types (apart from perhaps media and nav) would be good!
+			'autosave' => true,
+			'context' => 'normal',
+			'fields' => $this->helper_metabox_fields($fields),
+		);
+
+		return $metaboxes;
 	}
 
 	function plugin_activation() {
@@ -347,7 +387,7 @@ add_action( 'widgets_init', 'cranleigh_sportsdesk_register_widgets' );
 
 
 /* Actions */
-add_action("init", "cran_SportsDesk_Init");
+/*add_action("init", "cran_SportsDesk_Init");
 
 function cran_SportsDesk_Init() {
 	global $sportsdesk;
@@ -356,3 +396,5 @@ function cran_SportsDesk_Init() {
 
 
 
+*/
+$sportsdesk = new cran_SportsDesk();
