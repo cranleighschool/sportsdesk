@@ -134,7 +134,8 @@ class cran_SportsDesk {
 			'query_var' => "match", // This goes to the WP_Query schema
 			'supports' => array('title','author', 'excerpt', 'editor' ,/*'custom-fields'*/),
 //			'menu_icon' => plugins_url( 'img/16-Stop-Watch.png' , __FILE__ ),
-			'has_archive' => false,	//Create an archive to display historic data
+			'has_archive' => false,	//Create an archive to display historic data,
+			'exclude_from_search' => true
 		]);
 	}
 	function custom_taxonomies() {
