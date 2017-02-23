@@ -135,7 +135,7 @@ class cran_SportsDesk {
 			'supports' => array('title','author', 'excerpt', 'editor' ,/*'custom-fields'*/),
 //			'menu_icon' => plugins_url( 'img/16-Stop-Watch.png' , __FILE__ ),
 			'has_archive' => false,	//Create an archive to display historic data,
-			'exclude_from_search' => true
+			'exclude_from_search' => false
 		]);
 	}
 	function custom_taxonomies() {
