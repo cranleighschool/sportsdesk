@@ -7,6 +7,7 @@ Version: 1.0
 Author URI: http://www.cranleigh.org
 */
 
+
 class cran_SportsDesk {
 
     function __construct(){
