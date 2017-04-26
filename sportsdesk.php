@@ -2,8 +2,8 @@
 /*
 Plugin Name: Cranleigh School Sports Desk
 Description: A Wordpress plugin which holds the data behind sports matches for a variety of teams, needs a post, taxonomy, get templates to display correctly
-Author: Jona Young (jy@cranleigh.org)
-Version: 1.0
+Author: Fred Bradley (frb@cranleigh.org)
+Version: 1.5
 Author URI: http://www.cranleigh.org
 */
 
@@ -11,6 +11,7 @@ Author URI: http://www.cranleigh.org
 class cran_SportsDesk {
 
     function __construct(){
+
 	    add_action('init', array($this, 'custom_taxonomies')); // Because of the special rewrites on the custom taxonomies, they have to be loaded before the Custom Post Type
 	    add_action('init', array($this, 'custom_post_type'));
 
@@ -38,6 +39,39 @@ class cran_SportsDesk {
 
 		add_filter( 'rwmb_meta_boxes', array(&$this, 'metaboxes'), 99999 );
 
+		/* Do something clever with Cron! */
+		register_activation_hook(__FILE__, array($this, 'activation'));
+		register_deactivation_hook( __FILE__, array($this,'deactivation') );
+
+		add_filter('cron_schedules', array($this, 'scheduler'));
+		add_action('sportsdesk_sync', array($this, 'sportsdesk_sync'));
+
+	}
+
+	function deactivation(){
+		wp_clear_scheduled_hook( 'sportsdesk_sync' );
+	}
+	function sportsdesk_sync() {
+		require_once('class.Sync.php');
+		$sync = new CS_SportsdeskSync();
+	}
+
+	function activation() {
+		$timestamp = wp_next_scheduled( 'sportsdesk_sync' );
+
+		if ($timestamp == false) {
+			wp_schedule_event( time(), '15min', 'sportsdesk_sync' );
+		}
+	}
+	function scheduler($schedules) {
+		if(!isset($schedules["15min"])){
+	        $schedules["15min"] = array(
+				'interval' => 15*60,
+				'display' => __('Once every 15 minutes')
+			);
+    	}
+
+    	return $schedules;
 	}
 	function helper_metabox_fields($input_fields) {
 		$fields = [];
