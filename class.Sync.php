@@ -11,8 +11,26 @@ class CS_SportsdeskSync {
 
 	public function __construct() {
 		$this->slack_username = $this->slack_username." ".get_site_url();
+		$this->cran_term = get_option('cran_term');
+
 		$this->startSync();
 
+	}
+	private function termName($number) {
+		switch($number):
+			case 1:
+				return "Autumn";
+			break;
+			case 2:
+				return "Lent";
+			break;
+			case 3:
+				return "Summer";
+			break;
+			default:
+				return "UNKNOWN";
+			break;
+		endswitch;
 	}
 
 	private function checks() {
@@ -34,7 +52,7 @@ class CS_SportsdeskSync {
 
 		$this->checks();
 
-		$this->log("Checks Successful. The Year is: ".get_option('cran_year').", The Term is: ".get_option('cran_term'));
+		$this->log("Checks Successful. The Year is: ".get_option('cran_year').", The Term is: ".$this->termName(get_option('cran_term')));
 
 		// Get the rows from the database that iSAMS has sync'd to.
 		$rows = $wpdb->get_results("SELECT * from ".$this->isamsTable." WHERE academic_year = ".get_option('cran_year')." AND term = ".get_option('cran_term')." ORDER BY STR_TO_DATE(fixture_datetime, '%M %d %Y %l:%i%p');");
