@@ -2,25 +2,28 @@
 
 class CS_SportsdeskSync {
 
-	private $slack_username = "Sportsdesk Sync";
+	private $slack_username = "Senior Sportsdesk Sync";
 	public $slack_room = "website-project";
 	private $slack_hook = 'https://hooks.slack.com/services/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';
+	private $isamsTable = "senior_sports_fixtures";
 
 	private $debug = false;
 
 	public function __construct() {
+
 		$this->startSync();
+
 	}
 
 	private function checks() {
-		if (get_transient( 'senior_sports_sync' )) {
+		if (get_transient( 'sportsdesk_sync' )) {
 			$this->log("Sync Dead (Awaiting Data)", true);
 		}
 
-		if (get_transient('senior_sports_sync_running')) {
+		if (get_transient('sportsdesk_sync_running')) {
 			$this->log("Sync Dead (Sync already active)", true);
 		} else {
-			set_transient( 'senior_sports_sync_running', time(), WEEK_IN_SECONDS );
+			set_transient( 'sportsdesk_sync_running', time(), WEEK_IN_SECONDS );
 		}
 	}
 
@@ -34,7 +37,7 @@ class CS_SportsdeskSync {
 
 
 		// Get the rows from the database that iSAMS has sync'd to.
-		$rows = $wpdb->get_results("SELECT * from senior_sports_fixtures where academic_year = ".get_option('cran_year')." AND term = ".get_option('cran_term')." ORDER BY STR_TO_DATE(fixture_datetime, '%M %d %Y %l:%i%p');");
+		$rows = $wpdb->get_results("SELECT * from ".$this->isamsTable." WHERE academic_year = ".get_option('cran_year')." AND term = ".get_option('cran_term')." ORDER BY STR_TO_DATE(fixture_datetime, '%M %d %Y %l:%i%p');");
 		$this->slack("About to iterate through ".count($rows)." results");
 		//Iterate the fixtures in the fixture table
 
@@ -147,8 +150,8 @@ class CS_SportsdeskSync {
 
 		}
 		$this->debug("Sportsdesk Sync Complete. ".count($rows)." traversed</p>");
-		set_transient( 'senior_sports_sync', time(), 7 * MINUTE_IN_SECONDS );
-		delete_transient( 'senior_sports_sync_running' );
+		set_transient( 'sportsdesk_sync', time(), 7 * MINUTE_IN_SECONDS );
+		delete_transient( 'sportsdesk_sync_running' );
 
 
 		$this->log("Sync Complete - ".date("H:i:s"));
