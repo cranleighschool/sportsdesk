@@ -2,15 +2,15 @@
 
 class CS_SportsdeskSync {
 
-	private $slack_username = "Senior Sportsdesk Sync";
-	public $slack_room = "website-project";
+	private $slack_username = "Senior Sportsdesk";
+	public $slack_room = "sportsdesk-syncs";
 	private $slack_hook = 'https://hooks.slack.com/services/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';
 	private $isamsTable = "senior_sports_fixtures";
 
 	private $debug = false;
 
 	public function __construct() {
-
+		$this->slack_username = $this->slack_username." ".get_site_url();
 		$this->startSync();
 
 	}
@@ -30,11 +30,11 @@ class CS_SportsdeskSync {
 	public function startSync() {
 		global $wpdb;
 
+		$this->log("Starting Sync: ".date("H:i:s"));
+
 		$this->checks();
 
-
-		$this->slack("Checks Successful. The Year is: ".get_option('cran_year').", The Term is: ".get_option('cran_term'));
-
+		$this->log("Checks Successful. The Year is: ".get_option('cran_year').", The Term is: ".get_option('cran_term'));
 
 		// Get the rows from the database that iSAMS has sync'd to.
 		$rows = $wpdb->get_results("SELECT * from ".$this->isamsTable." WHERE academic_year = ".get_option('cran_year')." AND term = ".get_option('cran_term')." ORDER BY STR_TO_DATE(fixture_datetime, '%M %d %Y %l:%i%p');");
@@ -55,9 +55,9 @@ class CS_SportsdeskSync {
 
 			$fixture_res = $wpdb->get_results($querystr, OBJECT);
 			$existing_fixture = $fixture_res[0];
-			$this->debug("======================================" );
+			$this->debug("======================================");
 			$this->debug("Merlin ID of fixture: ".$fixture->fixture_id);
-			$this->debug("====================================== ");
+			$this->debug("======================================");
 
 			#if ($existing_fixture->id){
 			#} else {

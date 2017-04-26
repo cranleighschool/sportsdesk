@@ -6,7 +6,7 @@ Author: Fred Bradley (frb@cranleigh.org)
 Version: 1.5
 Author URI: http://www.cranleigh.org
 */
-
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 class cran_SportsDesk {
 
