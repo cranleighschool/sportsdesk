@@ -44,11 +44,13 @@ class CS_SportsdeskSync {
 			set_transient( 'sportsdesk_sync_running', time(), WEEK_IN_SECONDS );
 		}
 	}
-
+	private function date($display) {
+		return date($display, current_time("timestamp"));
+	}
 	public function startSync() {
 		global $wpdb;
 
-		$this->log("Starting Sync: ".date("H:i:s"));
+		$this->log("Starting Sync: ".$this->date("H:i:s"));
 
 		$this->checks();
 
@@ -172,7 +174,7 @@ class CS_SportsdeskSync {
 		delete_transient( 'sportsdesk_sync_running' );
 
 
-		$this->log("Sync Complete - ".date("H:i:s"));
+		$this->log("Sync Complete - ".$this->date("H:i:s"));
 
 
 
