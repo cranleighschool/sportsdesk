@@ -47,6 +47,13 @@
 		<option value="Disable"
 		<?php if(get_option('cran_mode')=='Disable') print " selected='selected' ";?>>Disable</option>
 	</select>
+	<br />
+	<br />
+	<label>Send Debug Log to Slack</label>
+	<select name="cran_send_sportsesk_sync_debug_to_slack">
+		<option <?php echo cs_sportdesk_get_term_select_value(get_option('cran_send_sportsesk_sync_debug_to_slack'), 0); ?>value="0">No</option>
+		<option <?php echo cs_sportdesk_get_term_select_value(get_option('cran_send_sportsesk_sync_debug_to_slack'), 1); ?>value="1">Yes</option>
+	</select>
         <p class="submit">
         <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
         </p>

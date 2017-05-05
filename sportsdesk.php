@@ -366,6 +366,7 @@ class cran_SportsDesk {
 		register_setting( 'cran_sportsdesk_group', 'cran_blackboard_ip' );
 		register_setting( 'cran_sportsdesk_group', 'cran_blackboard_folder' );
 		register_setting( 'cran_sportsdesk_group', 'cran_sportsdesk_slug');
+		register_setting( 'cran_sportsdesk_group', 'cran_send_sportsesk_sync_debug_to_slack');
 
 		//Format the metaboxes for custom post type of match
 		remove_meta_box('postexcerpt','match','normal');

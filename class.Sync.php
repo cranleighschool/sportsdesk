@@ -197,6 +197,9 @@ class CS_SportsdeskSync {
 	// (string) $room - room in which to write the message, too
 	// (string) $icon - You can set up custom emoji icons to use with each message
 	public function slack($message, $room = null, $icon = ":slack:") {
+		if (get_option('cran_send_sportsesk_sync_debug_to_slack')==0) {
+			return false;
+		}
         if ($room===null) {
 	        $room = $this->slack_room;
         }
