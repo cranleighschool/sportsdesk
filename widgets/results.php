@@ -46,7 +46,7 @@ class SportsDesk_Results_Widget extends WP_Widget {
     		var dropdown_team = document.getElementById("teamcat");
   		function onTeamCatChange() {
                 	if ( dropdown_team.options[dropdown_team.selectedIndex].value != -1 ) {
-                        	location.href = "<?php echo get_option('home');?>/team/"+dropdown_team.options[dropdown_team.selectedIndex].value+"/";
+                        	location.href = "<?php echo get_option('home');?><?php echo get_option('cran_sportsdesk_slug'); ?>team/"+dropdown_team.options[dropdown_team.selectedIndex].value+"/";
                 	}
     		}
     		dropdown_team.onchange = onTeamCatChange;
