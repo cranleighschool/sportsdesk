@@ -3,7 +3,7 @@
 Plugin Name: Cranleigh School Sports Desk
 Description: A Wordpress plugin which holds the data behind sports matches for a variety of teams, needs a post, taxonomy, get templates to display correctly
 Author: Fred Bradley (frb@cranleigh.org)
-Version: 1.5
+Version: 1.5.1
 Author URI: http://www.cranleigh.org
 */
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
